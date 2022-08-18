@@ -39,34 +39,18 @@ public class Program {
 			System.out.print("Data de Check-out (dd/mm/aaaa): ");
 			checkOut = sdf.parse(tec.next());
 			
-			Date now = new Date();
-			if(checkIn.before(now) || checkOut.before(now)) {
-				System.out.println("Erro na reserva: As reservas devem ser feitas com datas futuras");
-			}
-			else if(!checkOut.after(checkIn)) {
-				System.out.println("Erro na reserva: A data do check-out deve ser posterior a data do check-in;");
-			} 
-			else {
-				reservation.updateDates(checkIn, checkOut);
+			
+				String error = reservation.updateDates(checkIn, checkOut);
+				if (error != null) {
+					System.out.println("Erro na reserva: " + error);
+				}
+				else {
 				System.out.println("Reservas: " + reservation);
+				}
 			}
+		tec.close();	
 		}
-		
-		tec.close();
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 	}
 
-}
+
