@@ -6,28 +6,27 @@ import java.util.Date;
 import java.util.Scanner;
 
 import entities.Reserviation;
+import model.excepitions.DomainExcepition;
 
 public class Program {
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args)  {
 		
 		
 		Scanner tec = new Scanner(System.in);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		
-		System.out.print("Número de Quarto: ");
-		Integer roomNumber = tec.nextInt();
-		
-		System.out.print("Data do Check-in (dd/mm/aaaa):  ");
-		Date checkIn = sdf.parse(tec.next());
-		
-		System.out.print("Data de Check-out (dd/mm/aaaa): ");
-		Date checkOut = sdf.parse(tec.next());
-		
-		if(!checkOut.after(checkIn)) {
-			System.out.println("Erro na reserva: A data do check-out deve ser posterior a data do check-in;");
-		}
-		else {
+		try {
+			System.out.print("Número de Quarto: ");
+			Integer roomNumber = tec.nextInt();
+			
+			System.out.print("Data do Check-in (dd/mm/aaaa):  ");
+			Date checkIn = sdf.parse(tec.next());
+			
+			System.out.print("Data de Check-out (dd/mm/aaaa): ");
+			Date checkOut = sdf.parse(tec.next());
+			
+			
 			Reserviation reservation = new Reserviation(roomNumber, checkIn, checkOut);
 			System.out.println("Reserva: " + reservation);
 			
@@ -39,18 +38,18 @@ public class Program {
 			System.out.print("Data de Check-out (dd/mm/aaaa): ");
 			checkOut = sdf.parse(tec.next());
 			
-			
-				String error = reservation.updateDates(checkIn, checkOut);
-				if (error != null) {
-					System.out.println("Erro na reserva: " + error);
-				}
-				else {
-				System.out.println("Reservas: " + reservation);
-				}
-			}
-		tec.close();	
+			reservation.updateDates(checkIn, checkOut);
+			System.out.println("Reservas: " + reservation);
+			tec.close();
 		}
-		
+		catch (ParseException e) {
+			System.out.println("Formato de data inválido");
+		}
+		catch(DomainExcepition e) {
+			System.out.println("Erro na reserva: " + e.getMessage());
+		}
+		catch(RuntimeException e) {
+			System.out.println("Erro Inexperado");
+		}
 	}
-
-
+}
